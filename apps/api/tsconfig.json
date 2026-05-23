@@ -1,0 +1,12 @@
+{
+  "extends": "@saas/typescript-config/base.json",
+  "compilerOptions": {
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "types": ["node"]
+  },
+  "include": ["src", "prisma/seed.ts", "prisma.config.ts"]
+}
