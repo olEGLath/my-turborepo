@@ -3,7 +3,5 @@
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  }
+  "files": ["react-library.json", "base.json", "nextjs.json"]
 }
