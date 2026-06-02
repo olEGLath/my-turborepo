@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 
 import { isAuthenticated } from '@/auth/auth'
 
-export default function AppLayout({ children, teste }: Readonly<{ children: React.ReactNode teste: React.ReactNode }>) {
+export default function AppLayout({ children, sheet }: Readonly<{ children: React.ReactNode sheet: React.ReactNode }>) {
     if (!isAuthenticated()) {
         redirect('/auth/sign-in')
     }
@@ -10,7 +10,7 @@ export default function AppLayout({ children, teste }: Readonly<{ children: Reac
     return (
         <>
             {children}
-            {teste}
+            {sheet}
         </>
     )
 }
