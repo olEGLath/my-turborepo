@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
+import { acceptInvite } from "@/http/accept-invite"
 import {signInWithGitHub} from "@/http/sign-in-with-github";
 
 export async function GET(request: NextRequest) {
@@ -9,13 +10,32 @@ export async function GET(request: NextRequest) {
     const code = searchParams.get("code");
 
     if (!code) {
-        return NextResponse.json({ message: "GitHub OAuth code was not found." }, { status: 400 });
+        return NextResponse.json(
+            { message: "GitHub OAuth code was not found." }, 
+            { status: 400 },
+        )
     }
 
-    const redirectUrl = request.nextUrl.clone();
+    const { token } = await signInWithGitHub({ code })
 
-    redirectUrl.pathname = "/";
-    redirectUrl.search = "";
+    cookies().set('token', token, {
+        path: '/',
+        maxAge: 60 * 60 * 24 * 7, //7 days 
+    })
+
+    const inviteId = (await cookies()).get('inviteId')?.value
+
+    if (inviteId) {
+        try {
+            await acceptInvite(inviteId)
+            await cookies().delete('inviteId')
+        } catch {}
+    }
+
+    const redirectUrl = request.nextUrl.clone()
+
+    redirectUrl.pathname = "/"
+    redirectUrl.search = ""
 
     return NextResponse.redirect(redirectUrl)
 }
